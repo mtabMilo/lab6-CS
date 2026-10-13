@@ -30,32 +30,96 @@ public class IntSet {
      * Adds v to the set.
      * return true if v was added, false if it was already present
      */
-    public boolean add(int v) {
-        // TODO: use the insert() helper below - and remember to keep size up to date
+    public boolean add(int v)
+    {
+        if(root == null)
+        {
+            root = new IntNode(v);
+            size++;
+            return true;
+        }
+        else if(this.contains(v))
+        {
+            return false;
+        }
+
+        IntNode test = insert(root, v);
+
+        if (test == null)
+        {
+            return false;
+        }
+        else
+        {
+            size++;
+            return true;
+        }
     }
 
     /**
      * Inserts v below t and returns the root of that subtree afterward.
      * Mutable style: reassign t.left / t.right instead of building new nodes.
      */
-    private static IntNode insert(IntNode t, int v) {
-        // TODO
+    private static IntNode insert(IntNode t, int v)
+    {
+        if(t == null)
+        {
+            return new IntNode(v);
+        }
+        else if (v < t.value)
+        {
+            t.left = insert(t.left, v);
+        }
+        else if (v > t.value)
+        {
+            t.right = insert(t.right, v);
+        }
+        return t;
     }
 
     /**
      * Reports whether v is in the set.
      * return true if v is present
      */
-    public boolean contains(int v) {
-        // TODO
+    public boolean contains(int v)
+    {
+        if (root == null)
+        {
+            return false;
+        }
+        IntNode count = root;
+        while(count!=null)
+        {
+            if(v < count.value)
+            {
+                count = count.left;
+            }
+            else if(v > count.value)
+            {
+                count = count.right;
+            }
+            else
+            {
+                return true;
+            }
+        }
+        return false;
     }
 
     /**
      * Removes v from the set.
      * return true if v was removed, false if it was not present
      */
-    public boolean remove(int v) {
-        // TODO: use the remove(IntNode, int) helper below
+    public boolean remove(int v)
+    {
+        if(!this.contains(v))
+        {
+            return false;
+        }
+
+        root = remove(root, v);
+        size--;
+        return true;
     }
 
     /**
@@ -63,50 +127,149 @@ public class IntSet {
      * Handle all three cases from lecture: leaf, one child, two children
      * (copy the in-order successor up, then remove it from the right subtree).
      */
-    private static IntNode remove(IntNode t, int v) {
-        // TODO
+    private static IntNode remove(IntNode t, int v)
+    {
+        if(t == null){return null;}
+        if (v < t.value)
+        {
+            t.left = remove(t.left, v);
+        }
+        else if (v > t.value)
+        {
+            t.right = remove(t.right, v);
+        }
+        else
+        {
+            if(t.left == null && t.right == null)
+            {
+                return null;
+            }
+            else if(t.left == null)
+            {
+                return t.right;
+            }
+            else if(t.right == null)
+            {
+                return t.left;
+            }
+            else
+            {
+                t.value = min(t.right);
+                t.right = remove(t.right, t.value);
+            }
+        }
+        return t;
+    }
+
+    /**
+     * @return the smallest IntNode in a given set
+     * @throws NoSuchElementException if the set is empty
+     */
+    private static int min(IntNode t)
+    {
+        if (t == null)
+        {
+            throw new NoSuchElementException("Set is empty");
+        }
+        IntNode count = t;
+        while(count!=null)
+        {
+            if(count.left == null)
+            {
+                break;
+            }
+            count = count.left;
+        }
+        return count.value;
     }
 
     /** @return the number of values in the set */
-    public int size() {
-        // TODO
+    public int size()
+    {
+        return size;
     }
 
     /** @return true if the set has no values */
-    public boolean isEmpty() {
-        // TODO
+    public boolean isEmpty()
+    {
+        return root == null;
     }
 
     /**
      * @return the smallest value in the set
      * @throws NoSuchElementException if the set is empty
      */
-    public int min() {
-        // TODO
+    public int min()
+    {
+        if (root == null)
+        {
+            throw new NoSuchElementException("Set is empty");
+        }
+        IntNode count = root;
+        while(true)
+        {
+            if(count.left == null)
+            {
+                break;
+            }
+            count = count.left;
+        }
+        return count.value;
     }
 
     /**
      * @return the largest value in the set
      * @throws NoSuchElementException if the set is empty
      */
-    public int max() {
-        // TODO
+    public int max()
+    {
+        if (root == null)
+        {
+            throw new NoSuchElementException("Set is empty");
+        }
+        IntNode count = root;
+        while(true)
+        {
+            if(count.right == null)
+            {
+                break;
+            }
+            count = count.right;
+        }
+        return count.value;
     }
 
     /**
      * return a new list of every value in the set, in increasing order
      */
-    public List<Integer> toList() {
+    public List<Integer> toList()
+    {
         List<Integer> out = new ArrayList<>();
-        // TODO: fill out with an in-order traversal (a private recursive helper works well)
+        toList(root, out);
         return out;
+    }
+
+    /**
+     * recursively adds the lowest to highest value in the set
+     */
+    private static void toList(IntNode t, List<Integer> out)
+    {
+        if (t == null)
+        {
+            return;
+        }
+
+        toList(t.left, out);
+        out.add(t.value);
+        toList(t.right, out);
     }
 
     /**
      * return the height of the underlying tree (see TreeQueries.height).
      * This one is done for you, but it depends on your Part B code.
      */
-    public int height() {
+    public int height()
+    {
         return TreeQueries.height(root);
     }
 }

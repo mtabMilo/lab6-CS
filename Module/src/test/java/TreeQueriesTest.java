@@ -107,4 +107,12 @@ public class TreeQueriesTest {
         assertTrue(TreeQueries.isValidBST(n(0, leaf(Integer.MIN_VALUE), leaf(Integer.MAX_VALUE))));
     }
 
+    @Test
+    public void ownTest()
+    {
+        assertFalse(TreeQueries.isValidBST(n(12, null, n(12, leaf(7), null))));
+        IntNode f = n(1, n(2, n(3, n(4, n(5, n(6, n(7, n(8, n(9, n(10, n(999, null, null), null), null), null), null), null), null), null), null), null), null);
+        assertFalse(TreeQueries.isValidBST(f));
+    }
+
 }

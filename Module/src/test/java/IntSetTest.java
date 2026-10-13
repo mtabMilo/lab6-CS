@@ -76,10 +76,26 @@ public class IntSetTest {
         assertTrue(s.add(5));
         assertTrue(s.add(2));
         assertTrue(s.add(9));
+        assertTrue(s.add(10000));
         assertTrue(s.contains(5));
         assertTrue(s.contains(2));
         assertTrue(s.contains(9));
+        assertTrue(s.contains(10000));
         assertFalse(s.contains(7));
+        assertFalse(s.isEmpty());
+        assertEquals(4, s.size());
+    }
+
+    @Test
+    public void testAddAndContainsBigNumbers() {
+        IntSet s = new IntSet();
+        assertTrue(s.add(10000));
+        assertTrue(s.add(Integer.MIN_VALUE));
+        assertTrue(s.add(Integer.MAX_VALUE));
+        assertTrue(s.contains(10000));
+        assertTrue(s.contains(Integer.MIN_VALUE));
+        assertTrue(s.contains(Integer.MAX_VALUE));
+        assertTrue(s.contains(10000));
         assertFalse(s.isEmpty());
         assertEquals(3, s.size());
     }
@@ -169,6 +185,16 @@ public class IntSetTest {
         assertTrue(s.remove(12));   // successor 14 is a leaf
         assertFalse(s.contains(12));
         assertSetIs(s, 1, 3, 4, 6, 8, 10, 11, 14, 15, 18);
+    }
+
+    @Test
+    public void testRemoveNodeWithTwoChildrenTwice() {
+        IntSet s = lectureSet();
+        assertTrue(s.remove(12));   // successor 14 is a leaf
+        assertTrue(s.remove(15));
+        assertFalse(s.contains(12));
+        assertFalse(s.contains(15));
+        assertSetIs(s, 1, 3, 4, 6, 8, 10, 11, 14, 18);
     }
 
     @Test
