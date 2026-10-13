@@ -45,15 +45,7 @@ public class IntSet {
 
         IntNode test = insert(root, v);
 
-        if (test == null)
-        {
-            return false;
-        }
-        else
-        {
-            size++;
-            return true;
-        }
+        size++;return true;
     }
 
     /**
@@ -163,14 +155,9 @@ public class IntSet {
 
     /**
      * @return the smallest IntNode in a given set
-     * @throws NoSuchElementException if the set is empty
      */
-    private static int min(IntNode t)
+    public static int min(IntNode t)
     {
-        if (t == null)
-        {
-            throw new NoSuchElementException("Set is empty");
-        }
         IntNode count = t;
         while(count!=null)
         {
